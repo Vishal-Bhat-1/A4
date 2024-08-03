@@ -13,6 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare('INSERT INTO patients (name, severity) VALUES (?, ?)');
     $stmt->execute([$name, $severity]);
 
-    echo 'Patient added successfully';
+    echo json_encode(['success' => true]);
+    exit;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $stmt = $pdo->query('SELECT * FROM patients ORDER BY severity DESC, created_at ASC');
+    $patients = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    echo json_encode($patients);
+    exit;
 }
 ?>
